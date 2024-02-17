@@ -2,11 +2,13 @@ package com.example.alphanoveassessment1.book;
 
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity(name="book")
 @Table(name="book", uniqueConstraints = { @UniqueConstraint(
         name="UK_isbn", columnNames = "isbn")
 })
+@NoArgsConstructor
 public class Book {
     @SequenceGenerator(
             name="book_sequence",
@@ -24,9 +26,6 @@ public class Book {
     private String author;
     private Integer publicationYear;
     private Double priceGbp;
-
-    public Book(){
-    }
 
     public Book(String isbn, String name, String author, Integer publicationYear, Double priceGbp) {
         this.isbn = isbn;

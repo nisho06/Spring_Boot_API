@@ -1,6 +1,8 @@
 package com.example.alphanoveassessment1.book;
 
+import com.example.alphanoveassessment1.exception.ApiRequestException;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,8 @@ public class BookService {
     public void registerBook(Book book) {
         Optional<Book> bookOptional = bookRepository.findBookByIsbn(book.getIsbn());
         if (bookOptional.isPresent()) {
-            throw new IllegalStateException("Book with ISBN - " + book.getIsbn() + " already exists.");
+            throw new ApiRequestException("Book with ISBN - " + book.getIsbn() + " already exists.",
+                    HttpStatus.CONFLICT);
         }
         bookRepository.save(book);
     }
@@ -31,7 +34,8 @@ public class BookService {
     public void deleteBook(Long bookId) throws IllegalStateException{
         boolean isBookExist = bookRepository.existsById(bookId);
         if (!isBookExist){
-            throw new IllegalStateException("Book with id - " + bookId + " does not exist.");
+            throw new ApiRequestException("Book with id - " + bookId + " does not exist.",
+                    HttpStatus.NOT_FOUND);
         }
         bookRepository.deleteById(bookId);
     }
@@ -42,7 +46,8 @@ public class BookService {
                 "Book with id  " + bookId + " does not exist."));
         if (isbn != null && isbn.length()>0 && !(Objects.equals(isbn, book.getIsbn()))){
             if (bookRepository.findBookByIsbn(isbn).isPresent()){
-                throw new IllegalStateException("Book with ISBN " + isbn + " already exists.");
+                throw new ApiRequestException("Book with ISBN " + isbn + " already exists.",
+                        HttpStatus.CONFLICT);
             }
             book.setIsbn(isbn);
         }
@@ -63,5 +68,14 @@ public class BookService {
         if (priceGbp != null && priceGbp > 0 && !(Objects.equals(priceGbp, book.getPriceGbp()))){
             book.setPriceGbp(priceGbp);
         }
+    }
+
+    public Book getBookById(Long bookId) {
+        Optional<Book> book = bookRepository.findById(bookId);
+        if (book.isEmpty()){
+          throw new ApiRequestException("Book with id " + bookId + " does not exist.",
+                  HttpStatus.NOT_FOUND);
+        }
+        return book.get();
     }
 }

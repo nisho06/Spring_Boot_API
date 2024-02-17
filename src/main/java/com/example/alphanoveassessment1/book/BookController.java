@@ -19,8 +19,13 @@ public class BookController {
         return bookService.getBooks();
     }
 
+    @GetMapping(path = "{bookId}")
+    public Book getBook(@PathVariable Long bookId) {
+        return bookService.getBookById(bookId);
+    }
+
     @PostMapping
-    public void registerBook(@RequestBody Book book){
+    public void registerBook(@RequestBody Book book) {
         bookService.registerBook(book);
     }
 
