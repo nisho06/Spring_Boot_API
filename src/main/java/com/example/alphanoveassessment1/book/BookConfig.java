@@ -4,12 +4,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Configuration
 public class BookConfig {
 
+    /**
+     * The CommandLineRunner bean to execute code on application startup.
+     * @param bookRepository The bookRepository which handles all the data layer functionalities.
+     * @return CommandLineRunner object.
+     */
     @Bean
     public CommandLineRunner commandLineRunner(BookRepository bookRepository){
         return args -> {

@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @PostMapping
-    public void registerBook(@RequestBody Book book) {
+    public void registerBookSingle(@RequestBody Book book) {
         bookService.registerBook(book);
     }
 
